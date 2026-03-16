@@ -1,0 +1,21 @@
+{
+  "name": "@bordo/ad-research",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "ad-research": "tsx src/cli.ts",
+    "scrape": "tsx src/cli.ts scrape",
+    "build": "tsc --noEmit",
+    "clean": "rm -rf dist data/raw"
+  },
+  "dependencies": {
+    "@bordo/ad-insights": "workspace:*",
+    "playwright": "^1.49.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.8.0"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "bordo-games-growth",
+  "private": true,
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "lint": "turbo lint",
+    "clean": "turbo clean",
+    "creative-studio": "pnpm --filter @bordo/creative-studio creative-studio",
+    "ad-research": "pnpm --filter @bordo/ad-research ad-research"
+  },
+  "devDependencies": {
+    "turbo": "^2.5.0",
+    "typescript": "^5.8.0"
+  },
+  "packageManager": "pnpm@10.32.1"
+}

@@ -1,0 +1,2185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SKAN & AppsFlyer — Interactive Guide</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --surface2: #242836;
+    --border: #2e3345;
+    --text: #e4e6ed;
+    --muted: #8b8fa3;
+    --accent: #6c5ce7;
+    --accent2: #a29bfe;
+    --green: #00b894;
+    --orange: #fdcb6e;
+    --red: #e17055;
+    --blue: #74b9ff;
+    --pink: #fd79a8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* Navigation */
+  nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: rgba(15, 17, 23, 0.95);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    z-index: 100;
+    padding: 0 2rem;
+  }
+
+  nav .nav-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    height: 60px;
+    gap: 2rem;
+    overflow-x: auto;
+  }
+
+  nav .logo {
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--accent2);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  nav a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    transition: color 0.2s;
+  }
+
+  nav a:hover, nav a.active { color: var(--accent2); }
+
+  /* Sections */
+  section {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 5rem 2rem 3rem;
+  }
+
+  section:first-of-type { padding-top: 7rem; }
+
+  h1 {
+    font-size: 2.8rem;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, var(--accent2), var(--blue));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  h2 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    color: var(--text);
+    padding-top: 1rem;
+  }
+
+  h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 1.5rem 0 0.75rem;
+    color: var(--accent2);
+  }
+
+  p, li {
+    color: var(--muted);
+    font-size: 1.05rem;
+    margin-bottom: 1rem;
+  }
+
+  strong { color: var(--text); }
+
+  ul { padding-left: 1.5rem; }
+  li { margin-bottom: 0.5rem; }
+
+  .subtitle {
+    font-size: 1.25rem;
+    color: var(--muted);
+    margin-bottom: 3rem;
+    max-width: 600px;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+  }
+
+  .stat-card .number {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 0.25rem;
+  }
+
+  .stat-card .label {
+    font-size: 0.85rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* Interactive flow diagram */
+  .flow-diagram {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin: 2rem 0;
+  }
+
+  .flow-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+    cursor: pointer;
+    padding: 1rem;
+    border-radius: 12px;
+    transition: background 0.3s;
+    position: relative;
+  }
+
+  .flow-step:hover { background: var(--surface); }
+
+  .flow-step.active { background: var(--surface2); }
+
+  .flow-step .step-number {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--surface2);
+    border: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+    transition: all 0.3s;
+    position: relative;
+    z-index: 2;
+  }
+
+  .flow-step.active .step-number {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
+  }
+
+  .flow-step .step-connector {
+    position: absolute;
+    left: calc(1rem + 19px);
+    top: 50px;
+    width: 2px;
+    height: calc(100% - 20px);
+    background: var(--border);
+  }
+
+  .flow-step:last-child .step-connector { display: none; }
+
+  .flow-step .step-content h4 {
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+    color: var(--text);
+  }
+
+  .flow-step .step-content p {
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin: 0;
+  }
+
+  .flow-step .step-detail {
+    display: none;
+    margin-top: 0.75rem;
+    padding: 1rem;
+    background: var(--bg);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .flow-step.active .step-detail { display: block; }
+
+  /* Binary visualizer */
+  .bit-grid {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin: 1.5rem 0;
+    flex-wrap: wrap;
+  }
+
+  .bit-box {
+    width: 70px;
+    height: 70px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 2px solid var(--border);
+    background: var(--surface);
+    user-select: none;
+  }
+
+  .bit-box:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .bit-box.on { background: var(--accent); border-color: var(--accent2); }
+
+  .bit-box .bit-label {
+    font-size: 0.65rem;
+    color: var(--muted);
+    margin-bottom: 2px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .bit-box.on .bit-label { color: rgba(255,255,255,0.7); }
+
+  .bit-box .bit-value {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--text);
+  }
+
+  .bit-box.on .bit-value { color: white; }
+
+  .cv-result {
+    text-align: center;
+    margin: 1rem 0;
+    font-size: 1.1rem;
+    color: var(--muted);
+  }
+
+  .cv-result .cv-number {
+    font-size: 3rem;
+    font-weight: 800;
+    color: var(--accent2);
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+
+  /* Schema designer */
+  .schema-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .schema-tab {
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+  }
+
+  .schema-tab:hover { border-color: var(--accent); color: var(--text); }
+  .schema-tab.active { background: var(--accent); border-color: var(--accent); color: white; }
+
+  .schema-visual {
+    display: flex;
+    gap: 2px;
+    height: 60px;
+    margin: 1.5rem 0;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .schema-block {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: white;
+    text-align: center;
+    line-height: 1.3;
+    padding: 0 0.5rem;
+    transition: all 0.3s;
+  }
+
+  /* Timeline */
+  .timeline {
+    position: relative;
+    margin: 2rem 0;
+  }
+
+  .timeline-track {
+    width: 100%;
+    height: 8px;
+    background: var(--surface2);
+    border-radius: 4px;
+    position: relative;
+    margin-bottom: 1rem;
+  }
+
+  .timeline-segment {
+    position: absolute;
+    height: 100%;
+    border-radius: 4px;
+    transition: opacity 0.3s;
+    cursor: pointer;
+  }
+
+  .timeline-segment:hover { opacity: 0.8; }
+
+  .timeline-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-bottom: 1rem;
+  }
+
+  .window-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+
+  .window-card {
+    border-radius: 10px;
+    padding: 1.25rem;
+    border: 2px solid transparent;
+    transition: all 0.3s;
+    cursor: pointer;
+  }
+
+  .window-card:hover { transform: translateY(-2px); }
+
+  .window-card h4 {
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .window-card p {
+    font-size: 0.8rem;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .window-card .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    margin-top: 0.5rem;
+  }
+
+  .w1 { background: rgba(108, 92, 231, 0.15); border-color: var(--accent); }
+  .w1 h4 { color: var(--accent2); }
+  .w1 .tag { background: var(--accent); color: white; }
+
+  .w2 { background: rgba(116, 185, 255, 0.1); border-color: var(--blue); }
+  .w2 h4 { color: var(--blue); }
+  .w2 .tag { background: var(--blue); color: var(--bg); }
+
+  .w3 { background: rgba(0, 184, 148, 0.1); border-color: var(--green); }
+  .w3 h4 { color: var(--green); }
+  .w3 .tag { background: var(--green); color: var(--bg); }
+
+  /* Privacy threshold visualizer */
+  .threshold-demo {
+    margin: 2rem 0;
+  }
+
+  .threshold-slider-wrap {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .threshold-slider-wrap label {
+    font-size: 0.9rem;
+    color: var(--muted);
+    white-space: nowrap;
+    min-width: 160px;
+  }
+
+  input[type="range"] {
+    flex: 1;
+    -webkit-appearance: none;
+    height: 6px;
+    background: var(--surface2);
+    border-radius: 3px;
+    outline: none;
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+    border: 2px solid var(--accent2);
+  }
+
+  .threshold-result {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .threshold-box {
+    border-radius: 10px;
+    padding: 1.25rem;
+    text-align: center;
+    transition: all 0.5s;
+  }
+
+  .threshold-box .th-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
+
+  .threshold-box .th-value {
+    font-size: 1.5rem;
+    font-weight: 800;
+  }
+
+  .threshold-box .th-desc {
+    font-size: 0.8rem;
+    margin-top: 0.5rem;
+    opacity: 0.7;
+  }
+
+  .th-locked {
+    background: rgba(225, 112, 85, 0.15);
+    border: 1px solid var(--red);
+    color: var(--red);
+  }
+
+  .th-partial {
+    background: rgba(253, 203, 110, 0.15);
+    border: 1px solid var(--orange);
+    color: var(--orange);
+  }
+
+  .th-full {
+    background: rgba(0, 184, 148, 0.15);
+    border: 1px solid var(--green);
+    color: var(--green);
+  }
+
+  /* Comparison table */
+  .comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: 0.9rem;
+  }
+
+  .comparison-table th {
+    text-align: left;
+    padding: 0.75rem 1rem;
+    border-bottom: 2px solid var(--border);
+    color: var(--accent2);
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .comparison-table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--muted);
+  }
+
+  .comparison-table tr:hover td { color: var(--text); background: var(--surface); }
+
+  .badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+
+  .badge-green { background: rgba(0, 184, 148, 0.2); color: var(--green); }
+  .badge-orange { background: rgba(253, 203, 110, 0.2); color: var(--orange); }
+  .badge-red { background: rgba(225, 112, 85, 0.2); color: var(--red); }
+  .badge-blue { background: rgba(116, 185, 255, 0.2); color: var(--blue); }
+
+  /* Decision framework */
+  .decision-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .decision-card:hover { border-color: var(--accent); }
+
+  .decision-card .d-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+  }
+
+  .decision-card .d-header h4 {
+    font-size: 1rem;
+    color: var(--text);
+  }
+
+  .decision-card .d-header .arrow {
+    transition: transform 0.3s;
+    color: var(--muted);
+  }
+
+  .decision-card.open .d-header .arrow { transform: rotate(180deg); }
+
+  .decision-card .d-body {
+    display: none;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+    margin-top: 0.75rem;
+  }
+
+  .decision-card.open .d-body { display: block; }
+
+  .pros-cons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 0.5rem;
+  }
+
+  .pros-cons h5 {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+  }
+
+  .pros h5 { color: var(--green); }
+  .cons h5 { color: var(--red); }
+
+  .pros-cons ul {
+    padding-left: 1rem;
+    font-size: 0.85rem;
+  }
+
+  .pros-cons li { margin-bottom: 0.3rem; }
+
+  /* AppsFlyer role */
+  .af-features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+
+  .af-feature {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem;
+    transition: all 0.2s;
+  }
+
+  .af-feature:hover { border-color: var(--accent); transform: translateY(-2px); }
+
+  .af-feature .af-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .af-feature h4 {
+    font-size: 0.95rem;
+    margin-bottom: 0.4rem;
+    color: var(--text);
+  }
+
+  .af-feature p {
+    font-size: 0.85rem;
+    margin: 0;
+  }
+
+  /* Quiz */
+  .quiz-question {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .quiz-question h4 {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    color: var(--text);
+  }
+
+  .quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .quiz-opt {
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: var(--muted);
+    transition: all 0.2s;
+  }
+
+  .quiz-opt:hover { border-color: var(--accent); color: var(--text); }
+  .quiz-opt.correct { background: rgba(0, 184, 148, 0.15); border-color: var(--green); color: var(--green); }
+  .quiz-opt.wrong { background: rgba(225, 112, 85, 0.1); border-color: var(--red); color: var(--red); }
+
+  .quiz-explanation {
+    display: none;
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  .quiz-explanation.show { display: block; }
+  .quiz-explanation.is-correct { background: rgba(0, 184, 148, 0.1); color: var(--green); }
+  .quiz-explanation.is-wrong { background: rgba(225, 112, 85, 0.1); color: var(--red); }
+
+  /* Callout boxes */
+  .callout {
+    border-radius: 10px;
+    padding: 1.25rem;
+    margin: 1.5rem 0;
+    font-size: 0.95rem;
+  }
+
+  .callout-warn {
+    background: rgba(253, 203, 110, 0.1);
+    border-left: 3px solid var(--orange);
+    color: var(--orange);
+  }
+
+  .callout-info {
+    background: rgba(116, 185, 255, 0.1);
+    border-left: 3px solid var(--blue);
+    color: var(--blue);
+  }
+
+  .callout-critical {
+    background: rgba(225, 112, 85, 0.1);
+    border-left: 3px solid var(--red);
+    color: var(--red);
+  }
+
+  .callout strong { color: inherit; }
+
+  /* Divider */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 3rem 0;
+  }
+
+  /* Responsive */
+  @media (max-width: 700px) {
+    h1 { font-size: 2rem; }
+    h2 { font-size: 1.4rem; }
+    .window-cards { grid-template-columns: 1fr; }
+    .threshold-result { grid-template-columns: 1fr; }
+    .pros-cons { grid-template-columns: 1fr; }
+    section { padding: 3rem 1rem 2rem; }
+    nav .nav-inner { gap: 1rem; }
+  }
+
+  /* Scroll animations */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.6s ease;
+  }
+
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Recommendation banner */
+  .rec-banner {
+    background: linear-gradient(135deg, rgba(108, 92, 231, 0.15), rgba(0, 184, 148, 0.1));
+    border: 1px solid var(--accent);
+    border-radius: 14px;
+    padding: 1.5rem 2rem;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .rec-banner .rec-badge {
+    background: var(--accent);
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+  }
+
+  .rec-banner p { margin: 0; font-size: 0.95rem; color: var(--text); }
+
+  /* CV mapping table */
+  .cv-map-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8rem;
+    margin: 1.5rem 0;
+  }
+
+  .cv-map-table th {
+    text-align: left;
+    padding: 0.5rem 0.6rem;
+    border-bottom: 2px solid var(--border);
+    color: var(--accent2);
+    font-weight: 600;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    position: sticky;
+    top: 60px;
+    background: var(--bg);
+    z-index: 2;
+  }
+
+  .cv-map-table td {
+    padding: 0.4rem 0.6rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .cv-map-table tr:hover td { color: var(--text); background: var(--surface); }
+
+  .cv-map-table .cv-range { font-weight: 700; color: var(--accent2); font-variant-numeric: tabular-nums; }
+
+  .cv-map-table .highlight-row td {
+    background: rgba(108, 92, 231, 0.08);
+  }
+
+  /* Revenue bar inline */
+  .rev-bar-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .rev-bar {
+    height: 6px;
+    border-radius: 3px;
+    background: var(--accent);
+    transition: width 0.5s ease;
+    min-width: 2px;
+  }
+
+  /* Coarse CV cards */
+  .coarse-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+
+  .coarse-card {
+    border-radius: 10px;
+    padding: 1.25rem;
+    text-align: center;
+  }
+
+  .coarse-card h4 { font-size: 1.1rem; margin-bottom: 0.4rem; }
+  .coarse-card p { font-size: 0.85rem; margin: 0; }
+
+  .coarse-low { background: rgba(225, 112, 85, 0.12); border: 1px solid var(--red); }
+  .coarse-low h4 { color: var(--red); }
+  .coarse-mid { background: rgba(253, 203, 110, 0.12); border: 1px solid var(--orange); }
+  .coarse-mid h4 { color: var(--orange); }
+  .coarse-high { background: rgba(0, 184, 148, 0.12); border: 1px solid var(--green); }
+  .coarse-high h4 { color: var(--green); }
+
+  /* Phase timeline */
+  .phase-timeline {
+    display: flex;
+    gap: 0;
+    margin: 2rem 0;
+  }
+
+  .phase-block {
+    flex: 1;
+    padding: 1.25rem;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+  }
+
+  .phase-block:first-child { border-radius: 12px 0 0 12px; }
+  .phase-block:last-child { border-radius: 0 12px 12px 0; }
+
+  .phase-block.phase-active {
+    z-index: 1;
+    transform: scale(1.03);
+  }
+
+  .phase-block h4 {
+    font-size: 0.85rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .phase-block .phase-time {
+    font-size: 0.7rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .phase-detail-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-top: 1rem;
+    display: none;
+  }
+
+  .phase-detail-panel.visible { display: block; }
+
+  .phase-detail-panel table {
+    width: 100%;
+    font-size: 0.9rem;
+    border-collapse: collapse;
+  }
+
+  .phase-detail-panel td {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--border);
+    color: var(--muted);
+    vertical-align: top;
+  }
+
+  .phase-detail-panel td:first-child {
+    font-weight: 600;
+    color: var(--text);
+    width: 160px;
+    white-space: nowrap;
+  }
+
+  /* Budget simulator */
+  .budget-sim {
+    margin: 2rem 0;
+  }
+
+  .budget-slider-wrap {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .budget-slider-wrap label {
+    font-size: 0.9rem;
+    color: var(--muted);
+    white-space: nowrap;
+    min-width: 120px;
+  }
+
+  .budget-output {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .budget-stat {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem;
+    text-align: center;
+    transition: all 0.3s;
+  }
+
+  .budget-stat .bs-value {
+    font-size: 1.6rem;
+    font-weight: 800;
+    margin-bottom: 0.2rem;
+  }
+
+  .budget-stat .bs-label {
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  /* Checklist */
+  .checklist {
+    list-style: none;
+    padding: 0;
+    margin: 1.5rem 0;
+  }
+
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    margin-bottom: 0.25rem;
+    transition: background 0.2s;
+    cursor: pointer;
+  }
+
+  .checklist li:hover { background: var(--surface); }
+
+  .check-box {
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    border: 2px solid var(--border);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    margin-top: 2px;
+    font-size: 0.7rem;
+    color: transparent;
+  }
+
+  .checklist li.checked .check-box {
+    background: var(--green);
+    border-color: var(--green);
+    color: white;
+  }
+
+  .checklist li.checked .check-text {
+    text-decoration: line-through;
+    opacity: 0.5;
+  }
+
+  .check-text { font-size: 0.95rem; color: var(--muted); }
+  .check-text strong { color: var(--text); }
+
+  .checklist-progress {
+    margin-bottom: 1rem;
+  }
+
+  .checklist-progress-bar {
+    height: 6px;
+    background: var(--surface2);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+  }
+
+  .checklist-progress-fill {
+    height: 100%;
+    background: var(--green);
+    border-radius: 3px;
+    transition: width 0.4s ease;
+  }
+
+  .checklist-progress-text {
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+
+  @media (max-width: 700px) {
+    .coarse-grid { grid-template-columns: 1fr; }
+    .phase-timeline { flex-direction: column; }
+    .phase-block:first-child { border-radius: 12px 12px 0 0; }
+    .phase-block:last-child { border-radius: 0 0 12px 12px; }
+    .budget-output { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav>
+  <div class="nav-inner">
+    <div class="logo">SKAN Guide</div>
+    <a href="#why">Why SKAN</a>
+    <a href="#how">How It Works</a>
+    <a href="#cv">Conversion Values</a>
+    <a href="#windows">Measurement Windows</a>
+    <a href="#privacy">Privacy Thresholds</a>
+    <a href="#appsflyer">AppsFlyer's Role</a>
+    <a href="#decisions">Decisions</a>
+    <a href="#rec-schema">Our Schema</a>
+    <a href="#rec-meta">Meta Playbook</a>
+    <a href="#rec-checklist">Launch Checklist</a>
+    <a href="#quiz">Test Yourself</a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section id="why">
+  <h1>SKAdNetwork (SKAN) &<br>AppsFlyer's Solution</h1>
+  <p class="subtitle">Everything you need to know before your CTO call. Interactive guide — click elements to explore.</p>
+
+  <div class="card-grid">
+    <div class="stat-card fade-in">
+      <div class="number" style="color: var(--red)">~75%</div>
+      <div class="label">Users decline ad tracking</div>
+    </div>
+    <div class="stat-card fade-in">
+      <div class="number" style="color: var(--accent2)">64</div>
+      <div class="label">Possible conversion values</div>
+    </div>
+    <div class="stat-card fade-in">
+      <div class="number" style="color: var(--green)">35</div>
+      <div class="label">Days of measurement (SKAN 4)</div>
+    </div>
+  </div>
+
+  <h2>The Problem</h2>
+  <p>Since iOS 14.5, Apple requires users to explicitly opt in to ad tracking via <strong>App Tracking Transparency (ATT)</strong>. About 70-85% of users decline. This means traditional attribution (using Apple's device ID, IDFA) only works for a small minority.</p>
+  <p><strong>SKAdNetwork</strong> is Apple's answer: a privacy-preserving framework built into iOS that lets you measure ad campaign performance <strong>without any user identifier</strong>. It works for 100% of users, regardless of their ATT consent.</p>
+
+  <div class="callout callout-info">
+    <strong>Key insight:</strong> SKAN is not optional. It's the primary way to measure iOS ad performance for the vast majority of your users. AppsFlyer is the tool that makes SKAN data actionable.
+  </div>
+</section>
+
+<!-- How SKAN Works -->
+<section id="how">
+  <h2>How SKAN Works — The Full Flow</h2>
+  <p>Click each step to see details.</p>
+
+  <div class="flow-diagram" id="flowDiagram">
+    <div class="flow-step" onclick="toggleStep(this)">
+      <div class="step-number">1</div>
+      <div class="step-connector"></div>
+      <div class="step-content">
+        <h4>Ad is displayed in a publisher app</h4>
+        <p>Your ad shows in another app (e.g., a game). iOS registers the ad view.</p>
+        <div class="step-detail">
+          The publisher app shows your ad and starts a 3-second timer. If the ad is displayed for at least 3 seconds, SKAdNetwork registers this as a valid ad impression. The ad is cryptographically signed by the ad network, containing campaign info but <strong>no user identifiers</strong>.
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-step" onclick="toggleStep(this)">
+      <div class="step-number">2</div>
+      <div class="step-connector"></div>
+      <div class="step-content">
+        <h4>User installs & launches your app</h4>
+        <p>Must happen within 30 days. iOS attributes the install to the ad.</p>
+        <div class="step-detail">
+          If the user downloads and opens your app within the 30-day attribution window, iOS matches the install to the ad impression. This happens entirely on-device — <strong>no data leaves the phone at this stage</strong>. The attribution logic runs inside iOS itself, not on any server.
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-step" onclick="toggleStep(this)">
+      <div class="step-number">3</div>
+      <div class="step-connector"></div>
+      <div class="step-content">
+        <h4>Your app reports conversion values</h4>
+        <p>AppsFlyer SDK encodes user activity into a 6-bit number (0–63).</p>
+        <div class="step-detail">
+          As the user interacts with your app (makes purchases, completes levels, subscribes), the AppsFlyer SDK updates the conversion value based on your configured schema. This is a <strong>6-bit number (0–63)</strong> that encodes whatever metrics you chose to measure. The CV can only go up, never down — iOS enforces this. The activity window starts at first launch.
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-step" onclick="toggleStep(this)">
+      <div class="step-number">4</div>
+      <div class="step-connector"></div>
+      <div class="step-content">
+        <h4>Measurement window closes</h4>
+        <p>After the time window expires, the conversion value is locked.</p>
+        <div class="step-detail">
+          In SKAN 4, there are three windows: 0-2 days, 3-7 days, and 8-35 days. Once a window closes, its conversion value is locked and can't change. The first window gives you fine-grained data (0–63). Windows 2 and 3 only provide coarse values (low, medium, high). This is Apple's trade-off between measurement and privacy.
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-step" onclick="toggleStep(this)">
+      <div class="step-number">5</div>
+      <div class="step-connector"></div>
+      <div class="step-content">
+        <h4>iOS sends postback (with random delay)</h4>
+        <p>A data packet goes to the ad network + AppsFlyer. No user info included.</p>
+        <div class="step-detail">
+          iOS adds a <strong>random delay of 24-48 hours</strong> after the window closes before sending the postback. This delay is intentional — it prevents anyone from correlating the postback timing with a specific user's install. The postback contains: campaign ID, conversion value, source app — but <strong>zero user-identifying information</strong>. AppsFlyer receives a copy of every postback.
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-step" onclick="toggleStep(this)">
+      <div class="step-number">6</div>
+      <div class="step-connector"></div>
+      <div class="step-content">
+        <h4>AppsFlyer decodes & displays the data</h4>
+        <p>Raw CVs are decoded into meaningful metrics on your dashboard.</p>
+        <div class="step-detail">
+          AppsFlyer receives the postback, decodes the conversion value using your schema (e.g., CV 42 = "spent $5-$10, completed tutorial, logged in"), and presents it in your dashboard. They also apply <strong>machine learning models</strong> to estimate values for installs that fell below privacy thresholds and received null CVs. This is called "modeled data."
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Conversion Values Interactive -->
+<section id="cv">
+  <h2>Conversion Values — Interactive Explorer</h2>
+  <p>A conversion value is 6 binary bits. Click the bits below to toggle them and see how different combinations produce different values (0–63). <strong>You decide what each value means.</strong></p>
+
+  <div class="card" style="text-align: center;">
+    <div class="bit-grid" id="bitGrid">
+      <div class="bit-box" onclick="toggleBit(this, 5)" data-bit="5">
+        <span class="bit-label">Bit 5</span>
+        <span class="bit-value">0</span>
+      </div>
+      <div class="bit-box" onclick="toggleBit(this, 4)" data-bit="4">
+        <span class="bit-label">Bit 4</span>
+        <span class="bit-value">0</span>
+      </div>
+      <div class="bit-box" onclick="toggleBit(this, 3)" data-bit="3">
+        <span class="bit-label">Bit 3</span>
+        <span class="bit-value">0</span>
+      </div>
+      <div class="bit-box" onclick="toggleBit(this, 2)" data-bit="2">
+        <span class="bit-label">Bit 2</span>
+        <span class="bit-value">0</span>
+      </div>
+      <div class="bit-box" onclick="toggleBit(this, 1)" data-bit="1">
+        <span class="bit-label">Bit 1</span>
+        <span class="bit-value">0</span>
+      </div>
+      <div class="bit-box" onclick="toggleBit(this, 0)" data-bit="0">
+        <span class="bit-label">Bit 0</span>
+        <span class="bit-value">0</span>
+      </div>
+    </div>
+    <div class="cv-result">
+      <span class="cv-number" id="cvNumber">0</span>
+      Conversion Value (out of 63 max)
+    </div>
+  </div>
+
+  <h3>Schema Strategies — How to use those 64 values</h3>
+  <p>Choose a strategy to see how the 6 bits get allocated:</p>
+
+  <div class="schema-tabs">
+    <div class="schema-tab active" onclick="showSchema('revenue', this)">All Revenue</div>
+    <div class="schema-tab" onclick="showSchema('split', this)">Revenue + Events</div>
+    <div class="schema-tab" onclick="showSchema('combo', this)">Revenue + Events + Flag</div>
+    <div class="schema-tab" onclick="showSchema('engagement', this)">All Engagement</div>
+  </div>
+
+  <div class="schema-visual" id="schemaVisual"></div>
+  <div id="schemaDescription" class="card" style="font-size: 0.9rem;"></div>
+</section>
+
+<!-- Measurement Windows -->
+<section id="windows">
+  <h2>SKAN 4.0 — Three Measurement Windows</h2>
+  <p>SKAN 4.0 introduced multiple postbacks across three time windows, giving you a longer view of user behavior.</p>
+
+  <div class="timeline">
+    <div class="timeline-labels">
+      <span>Install</span>
+      <span>Day 2</span>
+      <span>Day 7</span>
+      <span>Day 35</span>
+    </div>
+    <div class="timeline-track">
+      <div class="timeline-segment" style="left: 0; width: 5.7%; background: var(--accent); border-radius: 4px 0 0 4px;"></div>
+      <div class="timeline-segment" style="left: 6.5%; width: 14.3%; background: var(--blue);"></div>
+      <div class="timeline-segment" style="left: 21.5%; width: 78.5%; background: var(--green); border-radius: 0 4px 4px 0;"></div>
+    </div>
+  </div>
+
+  <div class="window-cards">
+    <div class="window-card w1">
+      <h4>Window 1: Days 0–2</h4>
+      <p>Fine-grained CV (0–63)<br>+ Coarse (L/M/H)</p>
+      <span class="tag">Best data quality</span>
+      <p style="margin-top: 0.75rem; font-size: 0.8rem;">Postback arrives 24–48 hrs after window closes. This is your richest data source — 64 possible values to encode revenue, events, or both.</p>
+    </div>
+    <div class="window-card w2">
+      <h4>Window 2: Days 3–7</h4>
+      <p>Coarse CV only<br>(Low / Medium / High)</p>
+      <span class="tag">Medium-term signal</span>
+      <p style="margin-top: 0.75rem; font-size: 0.8rem;">Postback arrives 24–144 hrs after window closes. Only 3 possible values. Use it to see if users stay engaged in the first week.</p>
+    </div>
+    <div class="window-card w3">
+      <h4>Window 3: Days 8–35</h4>
+      <p>Coarse CV only<br>(Low / Medium / High)</p>
+      <span class="tag">Long-term retention</span>
+      <p style="margin-top: 0.75rem; font-size: 0.8rem;">Postback arrives 24–144 hrs after window closes. Measures month-long behavior, useful for subscriptions and LTV estimation.</p>
+    </div>
+  </div>
+
+  <div class="callout callout-warn" style="margin-top: 1.5rem;">
+    <strong>Trade-off:</strong> Longer measurement = more data but longer delay before you can optimize campaigns. Window 1 data arrives ~3-4 days after install. Window 3 data arrives up to ~37 days later.
+  </div>
+
+  <h3>SKAN 3 vs SKAN 4 Comparison</h3>
+  <table class="comparison-table">
+    <thead>
+      <tr>
+        <th>Feature</th>
+        <th>SKAN 3</th>
+        <th>SKAN 4</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Postbacks</td>
+        <td>1 postback only</td>
+        <td><span class="badge badge-green">3 postbacks</span></td>
+      </tr>
+      <tr>
+        <td>Fine CV (0–63)</td>
+        <td>1 window</td>
+        <td>Window 1 only</td>
+      </tr>
+      <tr>
+        <td>Coarse CV (L/M/H)</td>
+        <td><span class="badge badge-red">Not available</span></td>
+        <td><span class="badge badge-green">All 3 windows</span></td>
+      </tr>
+      <tr>
+        <td>Measurement period</td>
+        <td>Up to 24 hrs</td>
+        <td><span class="badge badge-green">Up to 35 days</span></td>
+      </tr>
+      <tr>
+        <td>Campaign granularity</td>
+        <td>100 campaign IDs</td>
+        <td><span class="badge badge-green">10,000 IDs (hierarchical)</span></td>
+      </tr>
+      <tr>
+        <td>Web ad attribution</td>
+        <td><span class="badge badge-red">No</span></td>
+        <td><span class="badge badge-green">Yes</span></td>
+      </tr>
+      <tr>
+        <td>Privacy model</td>
+        <td>All-or-nothing threshold</td>
+        <td><span class="badge badge-blue">4-tier crowd anonymity</span></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- Privacy Thresholds -->
+<section id="privacy">
+  <h2>Privacy Thresholds — The Catch</h2>
+  <p>Apple won't send full conversion values unless your campaign generates <strong>enough installs</strong>. This prevents identifying individual users from small campaigns. Drag the slider to see what data you get at different volumes.</p>
+
+  <div class="threshold-demo">
+    <div class="threshold-slider-wrap">
+      <label>Daily installs per campaign:</label>
+      <input type="range" id="thresholdSlider" min="0" max="300" value="30" oninput="updateThreshold(this.value)">
+      <strong id="thresholdCount" style="min-width: 40px; text-align: right;">30</strong>
+    </div>
+
+    <div class="threshold-result" id="thresholdResult">
+      <!-- Filled by JS -->
+    </div>
+
+    <div id="thresholdAdvice" class="callout callout-warn" style="margin-top: 1rem;"></div>
+  </div>
+
+  <h3>The Chicken-and-Egg Problem</h3>
+  <div class="card">
+    <p>You need campaign data to optimize and scale. But you need scale to get campaign data. This is the fundamental challenge of SKAN.</p>
+    <p><strong>Practical strategies:</strong></p>
+    <ul>
+      <li><strong>Consolidate campaigns</strong> — fewer, broader campaigns reach thresholds faster</li>
+      <li><strong>Use coarse values</strong> — SKAN 4's low/medium/high values kick in at lower thresholds than fine values</li>
+      <li><strong>Leverage modeled data</strong> — AppsFlyer uses ML to estimate values for installs with null CVs</li>
+      <li><strong>Combine with ATT data</strong> — use consented users (~15-30%) to calibrate your models</li>
+    </ul>
+  </div>
+</section>
+
+<!-- AppsFlyer's Role -->
+<section id="appsflyer">
+  <h2>What AppsFlyer Adds</h2>
+  <p>SKAN is Apple's raw framework. AppsFlyer makes it usable. Here's what you get:</p>
+
+  <div class="af-features">
+    <div class="af-feature fade-in">
+      <div class="af-icon" style="background: rgba(108, 92, 231, 0.2); color: var(--accent2);">&#9881;</div>
+      <h4>Conversion Studio</h4>
+      <p>Visual tool to design your CV schema. Drag-and-drop interface for choosing what your 64 values encode.</p>
+    </div>
+    <div class="af-feature fade-in">
+      <div class="af-icon" style="background: rgba(0, 184, 148, 0.2); color: var(--green);">&#9733;</div>
+      <h4>Schema Templates</h4>
+      <p>Pre-built schemas for gaming, e-commerce, subscriptions, and more. Start with a proven template, customize later.</p>
+    </div>
+    <div class="af-feature fade-in">
+      <div class="af-icon" style="background: rgba(116, 185, 255, 0.2); color: var(--blue);">&#9776;</div>
+      <h4>SKAN Dashboard</h4>
+      <p>Unified view of SKAN data across all ad networks. See campaign performance in one place.</p>
+    </div>
+    <div class="af-feature fade-in">
+      <div class="af-icon" style="background: rgba(253, 203, 110, 0.2); color: var(--orange);">&#10038;</div>
+      <h4>Modeled Data (ML)</h4>
+      <p>Machine learning fills gaps from null/missing CVs caused by privacy thresholds. Estimates the data you can't see.</p>
+    </div>
+    <div class="af-feature fade-in">
+      <div class="af-icon" style="background: rgba(253, 121, 168, 0.2); color: var(--pink);">&#8644;</div>
+      <h4>CV Decode</h4>
+      <p>Translates raw CV numbers (e.g., "42") back into business metrics (e.g., "$5-$10 revenue, tutorial complete").</p>
+    </div>
+    <div class="af-feature fade-in">
+      <div class="af-icon" style="background: rgba(225, 112, 85, 0.2); color: var(--red);">&#9888;</div>
+      <h4>Daily Recommendations</h4>
+      <p>Analyzes your non-SKAN data and suggests schema improvements to maximize accuracy of SKAN reporting.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Decisions -->
+<section id="decisions">
+  <h2>Key Decisions for Your CTO Call</h2>
+  <p>Click each decision to expand the trade-offs:</p>
+
+  <div class="decision-card" onclick="toggleDecision(this)">
+    <div class="d-header">
+      <h4>1. What to encode in your 64 conversion values?</h4>
+      <span class="arrow">&#9660;</span>
+    </div>
+    <div class="d-body">
+      <p style="color: var(--muted); font-size: 0.9rem;">This is the single most important decision. Your 64 values must encode everything you want to know about a user's first interactions with your app.</p>
+      <div class="pros-cons">
+        <div class="pros">
+          <h5>Revenue-focused schema</h5>
+          <ul>
+            <li>64 revenue buckets for precise ROAS</li>
+            <li>Best for subscription/IAP apps</li>
+            <li>Directly measures monetization</li>
+            <li>Simpler to set up and interpret</li>
+          </ul>
+        </div>
+        <div class="cons">
+          <h5>Engagement-focused schema</h5>
+          <ul>
+            <li>Track funnels, levels, features</li>
+            <li>Better for ad-monetized apps</li>
+            <li>Richer behavioral insights</li>
+            <li>Harder to tie to revenue</li>
+          </ul>
+        </div>
+      </div>
+      <div class="callout callout-info" style="margin-top: 1rem;">
+        <strong>Recommendation:</strong> For most apps, a split approach (3 bits revenue + 3 bits key events) gives the best balance. Use AppsFlyer's schema templates as a starting point.
+      </div>
+    </div>
+  </div>
+
+  <div class="decision-card" onclick="toggleDecision(this)">
+    <div class="d-header">
+      <h4>2. Measurement window duration strategy</h4>
+      <span class="arrow">&#9660;</span>
+    </div>
+    <div class="d-body">
+      <p style="color: var(--muted); font-size: 0.9rem;">How long do you measure in Window 1? Longer = more data but slower campaign optimization.</p>
+      <div class="pros-cons">
+        <div class="pros">
+          <h5>Shorter window (12–24 hrs)</h5>
+          <ul>
+            <li>Get data faster (postback ~3 days)</li>
+            <li>Optimize campaigns sooner</li>
+            <li>Good for apps with fast engagement</li>
+          </ul>
+        </div>
+        <div class="cons">
+          <h5>Longer window (48 hrs)</h5>
+          <ul>
+            <li>Captures more user actions</li>
+            <li>Better for slow-burn apps</li>
+            <li>Data arrives ~4-5 days after install</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="decision-card" onclick="toggleDecision(this)">
+    <div class="d-header">
+      <h4>3. Campaign consolidation vs. granularity</h4>
+      <span class="arrow">&#9660;</span>
+    </div>
+    <div class="d-body">
+      <p style="color: var(--muted); font-size: 0.9rem;">More campaigns = more targeting but risk falling below privacy thresholds. Fewer campaigns = more data per campaign.</p>
+      <div class="pros-cons">
+        <div class="pros">
+          <h5>Fewer, broader campaigns</h5>
+          <ul>
+            <li>More installs per campaign</li>
+            <li>Better chance of exceeding thresholds</li>
+            <li>Richer conversion value data</li>
+          </ul>
+        </div>
+        <div class="cons">
+          <h5>Many targeted campaigns</h5>
+          <ul>
+            <li>Granular audience targeting</li>
+            <li>Risk of null CVs everywhere</li>
+            <li>May need 128+ installs/day each</li>
+          </ul>
+        </div>
+      </div>
+      <div class="callout callout-critical" style="margin-top: 1rem;">
+        <strong>Watch out:</strong> Facebook recommends 128+ installs/day per campaign to get meaningful data. If you're spending small, consolidate.
+      </div>
+    </div>
+  </div>
+
+  <div class="decision-card" onclick="toggleDecision(this)">
+    <div class="d-header">
+      <h4>4. AdAttributionKit — Apple's successor</h4>
+      <span class="arrow">&#9660;</span>
+    </div>
+    <div class="d-body">
+      <p style="color: var(--muted); font-size: 0.9rem;">Apple announced AdAttributionKit as the next-gen replacement. It ships with iOS 18.4 and adds significant improvements.</p>
+      <ul style="font-size: 0.9rem;">
+        <li><strong>Configurable attribution windows</strong> — customize per campaign</li>
+        <li><strong>Re-engagement attribution</strong> — measure returning users (SKAN can't)</li>
+        <li><strong>Country codes in postbacks</strong> — geo data (subject to thresholds)</li>
+        <li><strong>Configurable cooldown periods</strong> — more control over timing</li>
+      </ul>
+      <div class="callout callout-info" style="margin-top: 1rem;">
+        <strong>Action item:</strong> Ask your CTO about the migration timeline. SKAN and AdAttributionKit will coexist for a while, but new features only come to the new framework.
+      </div>
+    </div>
+  </div>
+
+  <div class="decision-card" onclick="toggleDecision(this)">
+    <div class="d-header">
+      <h4>5. Dual strategy: SKAN + ATT-consented data</h4>
+      <span class="arrow">&#9660;</span>
+    </div>
+    <div class="d-body">
+      <p style="color: var(--muted); font-size: 0.9rem;">15-30% of users do consent to tracking. This "IDFA" data is full-fidelity, user-level attribution. SKAN covers the rest.</p>
+      <ul style="font-size: 0.9rem;">
+        <li>Use consented data to <strong>calibrate and validate</strong> your SKAN conversion value schemas</li>
+        <li>Use consented data for <strong>detailed cohort analysis</strong> and LTV modeling</li>
+        <li>Use SKAN for <strong>broad campaign measurement</strong> across all users</li>
+        <li>AppsFlyer's modeled data uses consented users to <strong>fill SKAN gaps</strong></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- RECOMMENDATIONS FOR BORDO SOCIAL CASINO APP -->
+<!-- ============================================ -->
+
+<!-- Recommended Schema -->
+<section id="rec-schema">
+  <div class="rec-banner">
+    <span class="rec-badge">Our Recommendation</span>
+    <p>Tailored for a <strong>social casino app</strong> launching on <strong>Meta ads</strong> with a limited budget.</p>
+  </div>
+
+  <h2>Our Conversion Value Schema</h2>
+  <p>86% of social casino apps use revenue-focused schemas. We recommend <strong>4-bit revenue + 1-bit auth type + 1-bit core loop</strong> — two independent flags instead of a sequential funnel, because you can't associate data with users until they sign in.</p>
+
+  <h3>Why two flags instead of a funnel?</h3>
+  <div class="card-grid">
+    <div class="card" style="border-left: 3px solid var(--accent);">
+      <h4 style="color: var(--accent2); font-size: 0.9rem;">Revenue stays king (4 bits)</h4>
+      <p style="font-size: 0.85rem;">16 revenue buckets give you granular ROAS data — critical for Meta Value Optimization. Social casino users who monetize do so fast (first 24 hrs).</p>
+    </div>
+    <div class="card" style="border-left: 3px solid var(--green);">
+      <h4 style="color: var(--green); font-size: 0.9rem;">Auth gate is your tracking gate</h4>
+      <p style="font-size: 0.85rem;">You can't associate events with users until sign-in. The auth flag tells you directly: <strong>what % of ad-acquired users can you actually track?</strong> Social auth users also retain much better.</p>
+    </div>
+    <div class="card" style="border-left: 3px solid var(--blue);">
+      <h4 style="color: var(--blue); font-size: 0.9rem;">Independent dimensions, not a pipe</h4>
+      <p style="font-size: 0.85rem;">A guest who plays 50 spins is different from a social-auth user who bounced. Two independent flags capture both dimensions. A sequential funnel would collapse this.</p>
+    </div>
+  </div>
+
+  <h3>Bit allocation</h3>
+  <div class="schema-visual" style="margin: 1rem 0;">
+    <div class="schema-block" style="flex: 4; background: var(--accent);">Revenue<br><small>4 bits = 16 buckets</small></div>
+    <div class="schema-block" style="flex: 1; background: var(--green);">Auth<br><small>1 bit</small></div>
+    <div class="schema-block" style="flex: 1; background: var(--blue);">Core<br><small>1 bit</small></div>
+  </div>
+
+  <h3>Signal flags decoded</h3>
+  <div style="overflow-x: auto;">
+    <table class="comparison-table" style="margin: 0.5rem 0 1.5rem;">
+      <thead><tr><th>Auth (bit 1)</th><th>Core loop (bit 0)</th><th>Value</th><th>Meaning</th><th>Your backend</th></tr></thead>
+      <tbody>
+        <tr><td>0</td><td>0</td><td><strong>0</strong></td><td>No sign-in / bounced</td><td style="color: var(--red);">Cannot identify</td></tr>
+        <tr><td>0</td><td>1</td><td><strong>1</strong></td><td>Guest login + played first spin</td><td style="color: var(--orange);">Guest ID only</td></tr>
+        <tr><td>1</td><td>0</td><td><strong>2</strong></td><td>Social auth, hasn't played yet</td><td style="color: var(--blue);">Identified, low engagement</td></tr>
+        <tr><td>1</td><td>1</td><td><strong>3</strong></td><td>Social auth + played first spin</td><td style="color: var(--green);">Full tracking</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Full CV mapping (all 64 values)</h3>
+  <p>Hover over rows to highlight. Each CV encodes both a revenue bucket AND a funnel stage.</p>
+
+  <div style="max-height: 500px; overflow-y: auto; border: 1px solid var(--border); border-radius: 10px;">
+    <table class="cv-map-table" id="cvMapTable">
+      <thead>
+        <tr>
+          <th>CV</th>
+          <th>Revenue</th>
+          <th style="width: 20%;">Visual</th>
+          <th>Auth</th>
+          <th>Core Loop</th>
+          <th>Tracking</th>
+        </tr>
+      </thead>
+      <tbody id="cvMapBody">
+        <!-- Filled by JS -->
+      </tbody>
+    </table>
+  </div>
+
+  <h3 style="margin-top: 2rem;">Window 1 duration: 24 hours</h3>
+  <div class="card">
+    <p>This is the industry standard for social casino (86% use it). Three reasons this is right for you:</p>
+    <ul>
+      <li><strong>Meta optimizes on day-of-install data</strong> — 24hrs aligns perfectly with their ML engine</li>
+      <li><strong>Casino users monetize fast</strong> — if they'll spend, they'll show intent in session 1</li>
+      <li><strong>You need fast feedback loops</strong> — at limited budget, waiting an extra day for postbacks is costly</li>
+    </ul>
+  </div>
+
+  <h3>Windows 2 & 3: Coarse values</h3>
+  <p>These windows only give Low/Medium/High. Here's what we encode:</p>
+
+  <h4 style="color: var(--blue); font-size: 0.95rem; margin-top: 1.5rem;">Window 2 (Days 3–7) — "Are they sticking?"</h4>
+  <div class="coarse-grid">
+    <div class="coarse-card coarse-low">
+      <h4>Low</h4>
+      <p>No purchase in days 3–7</p>
+    </div>
+    <div class="coarse-card coarse-mid">
+      <h4>Medium</h4>
+      <p>1 purchase in days 3–7</p>
+    </div>
+    <div class="coarse-card coarse-high">
+      <h4>High</h4>
+      <p>2+ purchases or >$20 spent</p>
+    </div>
+  </div>
+
+  <h4 style="color: var(--green); font-size: 0.95rem; margin-top: 1.5rem;">Window 3 (Days 8–35) — "Are they whales?"</h4>
+  <div class="coarse-grid">
+    <div class="coarse-card coarse-low">
+      <h4>Low</h4>
+      <p>Churned / no activity</p>
+    </div>
+    <div class="coarse-card coarse-mid">
+      <h4>Medium</h4>
+      <p>Active but not spending</p>
+    </div>
+    <div class="coarse-card coarse-high">
+      <h4>High</h4>
+      <p>Still spending at day 8–35</p>
+    </div>
+  </div>
+
+  <div class="callout callout-info" style="margin-top: 1.5rem;">
+    <strong>Iterate:</strong> These buckets are a starting point. After 2–4 weeks, check AppsFlyer's daily recommendations and adjust revenue boundaries based on your actual IAP distribution.
+  </div>
+</section>
+
+<!-- Meta Playbook -->
+<section id="rec-meta">
+  <h2>Meta Ads Playbook</h2>
+  <p>A phased approach to navigate the cold-start problem with limited budget. Click each phase for details.</p>
+
+  <div class="phase-timeline" id="phaseTimeline">
+    <div class="phase-block phase-active" style="background: rgba(108, 92, 231, 0.12); border-color: var(--accent);" onclick="showPhase(0)">
+      <h4 style="color: var(--accent2);">Phase 1: Launch</h4>
+      <div class="phase-time">Weeks 1–4</div>
+    </div>
+    <div class="phase-block" style="background: rgba(116, 185, 255, 0.08); border-color: var(--blue);" onclick="showPhase(1)">
+      <h4 style="color: var(--blue);">Phase 2: Optimize</h4>
+      <div class="phase-time">Week 5+</div>
+    </div>
+    <div class="phase-block" style="background: rgba(0, 184, 148, 0.08); border-color: var(--green);" onclick="showPhase(2)">
+      <h4 style="color: var(--green);">Phase 3: Scale</h4>
+      <div class="phase-time">When AEO is stable</div>
+    </div>
+  </div>
+
+  <div class="phase-detail-panel visible" id="phaseDetail0">
+    <table>
+      <tr><td>Campaign type</td><td><strong>Advantage+ App Campaigns</strong> (Meta's automated format — tests creatives, simplifies audiences)</td></tr>
+      <tr><td>Campaign count</td><td><strong>1 campaign only.</strong> Consolidation is critical at low volume.</td></tr>
+      <tr><td>Optimization goal</td><td><strong>MAI (Mobile App Install)</strong> — optimize for installs first. You don't have purchase data yet.</td></tr>
+      <tr><td>Ad sets</td><td><strong>1–2 max.</strong> Fewer ad sets = more installs per set = above privacy threshold.</td></tr>
+      <tr><td>Geo targeting</td><td>Consolidate into <strong>tiers</strong> (e.g., US+CA+UK). Don't split by individual country.</td></tr>
+      <tr><td>Min. iOS budget</td><td><strong>$500–600/day</strong> to have a chance at meaningful SKAN data.</td></tr>
+      <tr><td>Evaluation cadence</td><td style="color: var(--orange);">Wait <strong>72 hours minimum</strong> before making any changes. SKAN data is delayed.</td></tr>
+    </table>
+    <div class="callout callout-warn" style="margin-top: 1rem;">
+      <strong>Expect noisy data.</strong> First 2–4 weeks will have null/incomplete CVs. That's normal at launch. Use Android data as a directional proxy and rely on AppsFlyer's modeled data.
+    </div>
+  </div>
+
+  <div class="phase-detail-panel" id="phaseDetail1">
+    <table>
+      <tr><td>Optimization goal</td><td>Switch to <strong>AEO (App Event Optimization)</strong> — optimize for <code>Purchase</code> event</td></tr>
+      <tr><td>Prerequisite</td><td style="color: var(--orange);"><strong>~15 attributed purchases</strong> in the last 7 days (Meta's minimum for AEO)</td></tr>
+      <tr><td>Campaign count</td><td>Still <strong>1–2 campaigns max</strong></td></tr>
+      <tr><td>Split test</td><td>Consider 50% install optimization / 50% purchase optimization to compare</td></tr>
+      <tr><td>CV mapping</td><td>Ensure your AppsFlyer CV decode is shared with Meta via SKAN interoperation</td></tr>
+    </table>
+    <div class="callout callout-info" style="margin-top: 1rem;">
+      <strong>This is the key transition.</strong> Moving from install optimization to event optimization tells Meta's algorithm to find users who will actually spend, not just install. Your CPI will likely go up, but LTV should improve.
+    </div>
+  </div>
+
+  <div class="phase-detail-panel" id="phaseDetail2">
+    <table>
+      <tr><td>Optimization goal</td><td><strong>VO (Value Optimization)</strong> — Meta targets highest-value purchasers</td></tr>
+      <tr><td>Prerequisite</td><td>Stable AEO performance + sufficient purchase volume</td></tr>
+      <tr><td>CV mapping</td><td>Upload revenue bucket CSV to Meta via AppsFlyer interop (<strong>min/max must differ per bucket</strong>)</td></tr>
+      <tr><td>Campaign expansion</td><td>Now consider adding a second campaign or testing Google/TikTok</td></tr>
+      <tr><td>Schema tuning</td><td>Review if you should shift 1 funnel bit to revenue (5 bits = 32 buckets) for more ROAS precision</td></tr>
+    </table>
+    <div class="callout callout-info" style="margin-top: 1rem;">
+      <strong>This is the endgame.</strong> Value optimization is where SKAN really pays off — Meta uses your revenue signal to find whale-like users. This is where social casino UA gets profitable.
+    </div>
+  </div>
+
+  <h3 style="margin-top: 2rem;">Budget vs. Data Quality Simulator</h3>
+  <p>Drag to see what SKAN data you'll get at different daily iOS budgets (assuming social casino CPI of $3–$8).</p>
+
+  <div class="budget-sim">
+    <div class="budget-slider-wrap">
+      <label>Daily iOS budget:</label>
+      <input type="range" id="budgetSlider" min="100" max="2000" step="50" value="500" oninput="updateBudget(this.value)">
+      <strong id="budgetAmount" style="min-width: 60px; text-align: right;">$500</strong>
+    </div>
+
+    <div class="budget-output" id="budgetOutput">
+      <!-- Filled by JS -->
+    </div>
+
+    <div id="budgetAdvice" class="callout" style="margin-top: 1rem;"></div>
+  </div>
+</section>
+
+<!-- Launch Checklist -->
+<section id="rec-checklist">
+  <h2>Launch Checklist</h2>
+  <p>Click items to check them off. Share this with your CTO to track setup progress.</p>
+
+  <div class="checklist-progress" id="checklistProgress">
+    <div class="checklist-progress-bar"><div class="checklist-progress-fill" id="checkFill" style="width: 0%;"></div></div>
+    <div class="checklist-progress-text"><span id="checkCount">0</span> of <span id="checkTotal">0</span> completed</div>
+  </div>
+
+  <h3>SDK & Technical Setup</h3>
+  <ul class="checklist" id="checklistTech">
+    <li onclick="toggleCheck(this)"><span class="check-box">&#10003;</span><span class="check-text"><strong>Integrate AppsFlyer SDK</strong> with SKAN 4 support in your app</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">&#10003;</span><span class="check-text"><strong>Implement SDK events:</strong> login_guest, login_social, first_spin, purchase (with revenue)</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">&#10003;</span><span class="check-text"><strong>Set up ATT prompt</strong> with a compelling pre-prompt explaining value to user (aim for 25-30% opt-in)</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">&#10003;</span><span class="check-text"><strong>Verify IAP price points</strong> align with the revenue bucket boundaries, and that login_guest/login_social fire at the right time in your auth flow</span></li>
+  </ul>
+
+  <h3>AppsFlyer Configuration</h3>
+  <ul class="checklist" id="checklistAF">
+    <li onclick="toggleCheck(this)"><span class="check-box">&#10003;</span><span class="check-text"><strong>Enable SKAN measurement</strong> in Settings > SKAN Conversion Studio</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">&#10003;</span><span class="check-text"><strong>Set SKAN 4 mode</strong> (not SKAN 3) for coarse CV fallback support</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">&#10003;</span><span class="check-text"><strong>Configure Conversion Studio</strong> with the 4-bit revenue + 1-bit auth + 1-bit core loop schema</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">&#10003;</span><span class="check-text"><strong>Upload CV decode CSV</strong> so AppsFlyer translates raw numbers into business metrics</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">&#10003;</span><span class="check-text"><strong>Enable SSOT (Single Source of Truth)</strong> to deduplicate SKAN + non-SKAN data</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">&#10003;</span><span class="check-text"><strong>Enable Modeled Data</strong> — ML fills gaps from null CVs (critical at launch volume)</span></li>
+  </ul>
+
+  <h3>Meta Ads Integration</h3>
+  <ul class="checklist" id="checklistMeta">
+    <li onclick="toggleCheck(this)"><span class="check-box">&#10003;</span><span class="check-text"><strong>Enable Meta SKAN interoperation</strong> in Collaborate > Active Integrations > Meta ads > SKAN tab</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">&#10003;</span><span class="check-text"><strong>Share CV schema with Meta</strong> so both platforms decode the same way</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">&#10003;</span><span class="check-text"><strong>Set up Advantage+ App Campaign</strong> with 1 campaign, 1–2 ad sets, MAI optimization</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">&#10003;</span><span class="check-text"><strong>Configure geo tiers</strong> (e.g., US+CA+UK as one group) — don't split by country</span></li>
+  </ul>
+
+  <h3>Post-Launch (Weeks 2–4)</h3>
+  <ul class="checklist" id="checklistPost">
+    <li onclick="toggleCheck(this)"><span class="check-box">&#10003;</span><span class="check-text"><strong>Week 2:</strong> Check AppsFlyer daily recommendations — are revenue buckets right?</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">&#10003;</span><span class="check-text"><strong>Week 4:</strong> Review actual revenue distribution and refine bucket boundaries</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">&#10003;</span><span class="check-text"><strong>When 15+ purchases/week:</strong> Switch Meta from MAI to AEO (Purchase event)</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">&#10003;</span><span class="check-text"><strong>Month 2+:</strong> Evaluate shifting to 5-bit revenue (32 buckets) if funnel data is less useful</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">&#10003;</span><span class="check-text"><strong>iOS 18.4:</strong> Plan migration to AdAttributionKit with CTO</span></li>
+  </ul>
+</section>
+
+<!-- Quick Knowledge Check -->
+<section id="quiz">
+  <h2>Quick Knowledge Check</h2>
+  <p>Test your understanding before the call. Click an answer for each question.</p>
+
+  <div class="quiz-question" id="q1">
+    <h4>1. Why does SKAN exist?</h4>
+    <div class="quiz-options">
+      <div class="quiz-opt" onclick="checkAnswer(this, 'q1', false)">To replace Google Analytics for iOS apps</div>
+      <div class="quiz-opt" onclick="checkAnswer(this, 'q1', true)">To measure ad performance without user-identifying data, since most users decline tracking</div>
+      <div class="quiz-opt" onclick="checkAnswer(this, 'q1', false)">To help Apple sell more ad space in the App Store</div>
+    </div>
+    <div class="quiz-explanation" id="q1-exp">SKAN exists because ~75% of users decline IDFA tracking after iOS 14.5. Apple built SKAN so advertisers can still measure campaign effectiveness in a privacy-preserving way — no device IDs, no user-level data.</div>
+  </div>
+
+  <div class="quiz-question" id="q2">
+    <h4>2. What is a conversion value?</h4>
+    <div class="quiz-options">
+      <div class="quiz-opt" onclick="checkAnswer(this, 'q2', false)">The revenue amount from a single user</div>
+      <div class="quiz-opt" onclick="checkAnswer(this, 'q2', false)">A unique user ID assigned by Apple</div>
+      <div class="quiz-opt" onclick="checkAnswer(this, 'q2', true)">A 6-bit number (0–63) that you configure to encode post-install activity</div>
+    </div>
+    <div class="quiz-explanation" id="q2-exp">A conversion value is a 6-bit number giving you 64 possible values. You define what each value means (revenue buckets, events, engagement levels). It's the only post-install data you get from SKAN — making schema design critical.</div>
+  </div>
+
+  <div class="quiz-question" id="q3">
+    <h4>3. What happens if your campaign has too few installs?</h4>
+    <div class="quiz-options">
+      <div class="quiz-opt" onclick="checkAnswer(this, 'q3', false)">Apple charges a penalty fee</div>
+      <div class="quiz-opt" onclick="checkAnswer(this, 'q3', true)">You get null or only coarse (low/medium/high) conversion values instead of fine-grained data</div>
+      <div class="quiz-opt" onclick="checkAnswer(this, 'q3', false)">SKAN stops tracking entirely for that campaign</div>
+    </div>
+    <div class="quiz-explanation" id="q3-exp">Apple's privacy thresholds require enough installs to prevent identifying individuals. Below the threshold: you get null CVs (SKAN 3) or only coarse values like low/medium/high (SKAN 4). This is why campaign consolidation matters.</div>
+  </div>
+
+  <div class="quiz-question" id="q4">
+    <h4>4. How quickly do you get SKAN data after a user installs?</h4>
+    <div class="quiz-options">
+      <div class="quiz-opt" onclick="checkAnswer(this, 'q4', false)">In real time</div>
+      <div class="quiz-opt" onclick="checkAnswer(this, 'q4', false)">Within 1 hour</div>
+      <div class="quiz-opt" onclick="checkAnswer(this, 'q4', true)">At least 3–4 days for Window 1 data (measurement period + random 24-48hr delay)</div>
+    </div>
+    <div class="quiz-explanation" id="q4-exp">Window 1 measures for 0-2 days, then iOS adds a random 24-48 hour delay before sending the postback. So the earliest you see data is ~3 days after install. Windows 2 and 3 are even later. This is a major limitation for real-time campaign optimization.</div>
+  </div>
+
+  <div class="quiz-question" id="q5">
+    <h4>5. What is AppsFlyer's main role in SKAN?</h4>
+    <div class="quiz-options">
+      <div class="quiz-opt" onclick="checkAnswer(this, 'q5', false)">It replaces SKAN with its own attribution system</div>
+      <div class="quiz-opt" onclick="checkAnswer(this, 'q5', true)">It helps configure conversion values, collects postbacks, decodes data, and uses ML to fill data gaps</div>
+      <div class="quiz-opt" onclick="checkAnswer(this, 'q5', false)">It handles all communication with Apple on your behalf</div>
+    </div>
+    <div class="quiz-explanation" id="q5-exp">AppsFlyer sits on top of Apple's SKAN framework. It provides: Conversion Studio (design your schema), postback collection, CV decoding (raw numbers → business metrics), SKAN dashboard, and modeled data (ML estimates for null values). It makes raw SKAN data actionable.</div>
+  </div>
+</section>
+
+<!-- Limitations Summary -->
+<section>
+  <h2>Honest Limitations to Remember</h2>
+  <div class="card-grid">
+    <div class="card" style="border-left: 3px solid var(--red);">
+      <h4 style="color: var(--red); font-size: 0.9rem;">No real-time data</h4>
+      <p style="font-size: 0.85rem;">Minimum 24-48hr delay on all postbacks. You cannot optimize campaigns in real time.</p>
+    </div>
+    <div class="card" style="border-left: 3px solid var(--red);">
+      <h4 style="color: var(--red); font-size: 0.9rem;">No user-level data</h4>
+      <p style="font-size: 0.85rem;">Everything is aggregated at campaign level. No individual user journeys.</p>
+    </div>
+    <div class="card" style="border-left: 3px solid var(--orange);">
+      <h4 style="color: var(--orange); font-size: 0.9rem;">64-value cap</h4>
+      <p style="font-size: 0.85rem;">Forces hard trade-offs on what you measure. You can't track everything.</p>
+    </div>
+    <div class="card" style="border-left: 3px solid var(--orange);">
+      <h4 style="color: var(--orange); font-size: 0.9rem;">Privacy thresholds</h4>
+      <p style="font-size: 0.85rem;">Low-volume campaigns get limited or no conversion data.</p>
+    </div>
+    <div class="card" style="border-left: 3px solid var(--orange);">
+      <h4 style="color: var(--orange); font-size: 0.9rem;">No re-engagement</h4>
+      <p style="font-size: 0.85rem;">SKAN only measures first install. No returning/churned user attribution.</p>
+    </div>
+    <div class="card" style="border-left: 3px solid var(--orange);">
+      <h4 style="color: var(--orange); font-size: 0.9rem;">Fraud vulnerability</h4>
+      <p style="font-size: 0.85rem;">Concentrated attribution creates a target for ad fraud manipulation.</p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div style="text-align: center; padding: 2rem 0 4rem;">
+    <p style="color: var(--muted); font-size: 0.85rem;">Sources: <a href="https://support.appsflyer.com/hc/en-us/articles/360011420698-SKAdNetwork-SKAN-solution-guide" style="color: var(--accent2);">AppsFlyer SKAN Guide</a> &middot; <a href="https://support.appsflyer.com/hc/en-us/articles/4403727223185-SKAN-Conversion-Studio" style="color: var(--accent2);">Conversion Studio</a> &middot; <a href="https://splitmetrics.com/blog/apple-skadnetwork-guide/" style="color: var(--accent2);">SplitMetrics SKAN Guide</a> &middot; <a href="https://www.appsflyer.com/blog/tips-strategy/skadnetworks-conversion-values-power/" style="color: var(--accent2);">AppsFlyer CV Guide</a></p>
+  </div>
+</section>
+
+<script>
+  // Flow diagram interaction
+  function toggleStep(el) {
+    const wasActive = el.classList.contains('active');
+    document.querySelectorAll('.flow-step').forEach(s => s.classList.remove('active'));
+    if (!wasActive) el.classList.add('active');
+  }
+
+  // Bit toggler
+  const bits = [0, 0, 0, 0, 0, 0];
+
+  function toggleBit(el, pos) {
+    bits[pos] = bits[pos] === 0 ? 1 : 0;
+    el.classList.toggle('on');
+    el.querySelector('.bit-value').textContent = bits[pos];
+    const cv = bits[5]*32 + bits[4]*16 + bits[3]*8 + bits[2]*4 + bits[1]*2 + bits[0]*1;
+    document.getElementById('cvNumber').textContent = cv;
+  }
+
+  // Schema visualizer
+  const schemas = {
+    revenue: {
+      blocks: [
+        { label: 'Revenue<br>Bucket', bits: 6, color: 'var(--accent)' }
+      ],
+      desc: '<strong>All 6 bits for revenue.</strong> You get 64 revenue buckets (e.g., $0, $0.01–$0.99, $1–$1.99, ... $100+). Maximum revenue precision, but zero insight into user behavior or engagement events.'
+    },
+    split: {
+      blocks: [
+        { label: 'Revenue', bits: 3, color: 'var(--accent)' },
+        { label: 'Key Events', bits: 3, color: 'var(--blue)' }
+      ],
+      desc: '<strong>3 bits revenue + 3 bits events.</strong> You get 8 revenue buckets and 8 event levels (e.g., tutorial done, level 5 reached, subscription started). Balanced insight into both monetization and engagement.'
+    },
+    combo: {
+      blocks: [
+        { label: 'Revenue', bits: 3, color: 'var(--accent)' },
+        { label: 'Events', bits: 2, color: 'var(--blue)' },
+        { label: 'Login', bits: 1, color: 'var(--green)' }
+      ],
+      desc: '<strong>3 bits revenue + 2 bits events + 1 flag.</strong> You get 8 revenue buckets, 4 event levels, and a yes/no flag (e.g., logged in, subscribed, completed onboarding). Most info variety, least precision per metric.'
+    },
+    engagement: {
+      blocks: [
+        { label: 'Funnel Stage', bits: 3, color: 'var(--green)' },
+        { label: 'Session Count', bits: 2, color: 'var(--orange)' },
+        { label: 'Registration', bits: 1, color: 'var(--pink)' }
+      ],
+      desc: '<strong>All engagement, no revenue.</strong> 8 funnel stages, 4 session ranges, and a registration flag. Best for ad-monetized apps where direct revenue tracking is less critical than understanding behavior.'
+    }
+  };
+
+  function showSchema(type, el) {
+    document.querySelectorAll('.schema-tab').forEach(t => t.classList.remove('active'));
+    if (el) { el.classList.add('active'); }
+    else { document.querySelector('.schema-tab')?.classList.add('active'); }
+
+    const s = schemas[type];
+    const vis = document.getElementById('schemaVisual');
+    vis.innerHTML = '';
+
+    s.blocks.forEach(b => {
+      const div = document.createElement('div');
+      div.className = 'schema-block';
+      div.style.flex = b.bits;
+      div.style.background = b.color;
+      div.innerHTML = b.label + '<br><small>' + b.bits + ' bit' + (b.bits > 1 ? 's' : '') + ' = ' + Math.pow(2, b.bits) + ' values</small>';
+      vis.appendChild(div);
+    });
+
+    document.getElementById('schemaDescription').innerHTML = s.desc;
+  }
+
+  // Initialize schema
+  showSchema('revenue');
+
+  // Privacy threshold simulator
+  function updateThreshold(val) {
+    document.getElementById('thresholdCount').textContent = val;
+    const result = document.getElementById('thresholdResult');
+    const advice = document.getElementById('thresholdAdvice');
+    let html = '';
+
+    if (val < 20) {
+      html = `
+        <div class="threshold-box th-locked"><div class="th-label">Source App ID</div><div class="th-value">Hidden</div><div class="th-desc">Not enough data</div></div>
+        <div class="threshold-box th-locked"><div class="th-label">Conversion Value</div><div class="th-value">null</div><div class="th-desc">No CV at all</div></div>
+        <div class="threshold-box th-locked"><div class="th-label">Campaign ID</div><div class="th-value">2 digits</div><div class="th-desc">Very limited</div></div>
+      `;
+      advice.className = 'callout callout-critical';
+      advice.innerHTML = '<strong>Critical:</strong> At this volume, you get almost no useful data. You only know installs happened, but nothing about user quality or campaign effectiveness. Consolidate campaigns or increase spend.';
+    } else if (val < 80) {
+      html = `
+        <div class="threshold-box th-partial"><div class="th-label">Source App ID</div><div class="th-value">Visible</div><div class="th-desc">Can see which app</div></div>
+        <div class="threshold-box th-partial"><div class="th-label">Conversion Value</div><div class="th-value">L / M / H</div><div class="th-desc">Coarse only</div></div>
+        <div class="threshold-box th-partial"><div class="th-label">Campaign ID</div><div class="th-value">3 digits</div><div class="th-desc">Moderate</div></div>
+      `;
+      advice.className = 'callout callout-warn';
+      advice.innerHTML = '<strong>Partial data:</strong> You get coarse conversion values (Low/Medium/High) and some campaign detail. Useful for directional insights but not precise ROAS measurement. SKAN 4 improvements help here.';
+    } else if (val < 150) {
+      html = `
+        <div class="threshold-box th-full"><div class="th-label">Source App ID</div><div class="th-value">Visible</div><div class="th-desc">Full visibility</div></div>
+        <div class="threshold-box th-partial"><div class="th-label">Conversion Value</div><div class="th-value">0 – 63</div><div class="th-desc">Fine-grained (likely)</div></div>
+        <div class="threshold-box th-full"><div class="th-label">Campaign ID</div><div class="th-value">3-4 digits</div><div class="th-desc">Good granularity</div></div>
+      `;
+      advice.className = 'callout callout-info';
+      advice.innerHTML = '<strong>Good data:</strong> You likely get fine-grained conversion values (0–63) and decent campaign granularity. This is where SKAN becomes meaningfully useful for optimization.';
+    } else {
+      html = `
+        <div class="threshold-box th-full"><div class="th-label">Source App ID</div><div class="th-value">Visible</div><div class="th-desc">Full visibility</div></div>
+        <div class="threshold-box th-full"><div class="th-label">Conversion Value</div><div class="th-value">0 – 63</div><div class="th-desc">Full fine-grained</div></div>
+        <div class="threshold-box th-full"><div class="th-label">Campaign ID</div><div class="th-value">4 digits</div><div class="th-desc">Max granularity</div></div>
+      `;
+      advice.className = 'callout callout-info';
+      advice.innerHTML = '<strong>Full data:</strong> At this volume, you get maximum data from SKAN — fine-grained CVs, full campaign detail, and source app visibility. You can meaningfully optimize campaigns.';
+    }
+
+    result.innerHTML = html;
+  }
+
+  updateThreshold(30);
+
+  // Decision cards
+  function toggleDecision(el) {
+    el.classList.toggle('open');
+  }
+
+  // Quiz
+  function checkAnswer(el, qId, correct) {
+    const q = document.getElementById(qId);
+    if (q.dataset.answered) return;
+    q.dataset.answered = 'true';
+
+    const exp = document.getElementById(qId + '-exp');
+
+    if (correct) {
+      el.classList.add('correct');
+      exp.className = 'quiz-explanation show is-correct';
+    } else {
+      el.classList.add('wrong');
+      q.querySelectorAll('.quiz-opt').forEach(o => {
+        if (!o.classList.contains('wrong')) {
+          // find the correct one
+        }
+      });
+      exp.className = 'quiz-explanation show is-wrong';
+    }
+  }
+
+  // Scroll animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) e.target.classList.add('visible');
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // === RECOMMENDATION SECTIONS JS ===
+
+  // CV Map table generation
+  const revBuckets = [
+    '$0', '$0.01–$0.99', '$1–$1.99', '$2–$4.99',
+    '$5–$9.99', '$10–$14.99', '$15–$19.99', '$20–$29.99',
+    '$30–$39.99', '$40–$49.99', '$50–$74.99', '$75–$99.99',
+    '$100–$149.99', '$150–$249.99', '$250–$499.99', '$500+'
+  ];
+  const revMaxUsd = [0, 1, 2, 5, 10, 15, 20, 30, 40, 50, 75, 100, 150, 250, 500, 800];
+  const authLabels = ['None/bounce', 'Guest', 'Social auth', 'Social auth'];
+  const authColors  = ['var(--red)',  'var(--orange)', 'var(--green)', 'var(--green)'];
+  const coreLabels  = ['No',  'Yes',  'No',  'Yes'];
+  const coreColors  = ['var(--red)', 'var(--green)', 'var(--red)', 'var(--green)'];
+  const trackLabels = ['Cannot identify', 'Guest ID only', 'Identified, not engaged', 'Full tracking'];
+  const trackColors = ['var(--red)', 'var(--orange)', 'var(--blue)', 'var(--green)'];
+
+  function buildCvMap() {
+    const tbody = document.getElementById('cvMapBody');
+    if (!tbody) return;
+    let html = '';
+    for (let rev = 0; rev < 16; rev++) {
+      for (let sig = 0; sig < 4; sig++) {
+        const cv = rev * 4 + sig;
+        const barW = Math.max(2, (revMaxUsd[rev] / 800) * 100);
+        const isKey = (cv === 0 || cv === 3 || cv === 5 || cv === 23 || cv === 63);
+        html += `<tr class="${isKey ? 'highlight-row' : ''}">
+          <td class="cv-range">${cv}</td>
+          <td>${revBuckets[rev]}</td>
+          <td><div class="rev-bar-wrap"><div class="rev-bar" style="width: ${barW}%;"></div></div></td>
+          <td style="color: ${authColors[sig]};">${authLabels[sig]}</td>
+          <td style="color: ${coreColors[sig]};">${coreLabels[sig]}</td>
+          <td style="color: ${trackColors[sig]}; font-size:0.75rem;">${trackLabels[sig]}</td>
+        </tr>`;
+      }
+    }
+    tbody.innerHTML = html;
+  }
+  buildCvMap();
+
+  // Phase timeline
+  function showPhase(idx) {
+    document.querySelectorAll('.phase-block').forEach((b, i) => {
+      b.classList.toggle('phase-active', i === idx);
+    });
+    for (let i = 0; i < 3; i++) {
+      const panel = document.getElementById('phaseDetail' + i);
+      if (panel) panel.classList.toggle('visible', i === idx);
+    }
+  }
+
+  // Budget simulator
+  function updateBudget(val) {
+    document.getElementById('budgetAmount').textContent = '$' + val;
+    const cpiLow = 3, cpiHigh = 8;
+    const installsHigh = Math.round(val / cpiLow);
+    const installsLow = Math.round(val / cpiHigh);
+    const installsMid = Math.round((installsLow + installsHigh) / 2);
+
+    let thresholdStatus, thresholdColor, dataQuality, metaReady;
+    if (installsMid < 40) {
+      thresholdStatus = 'Below';
+      thresholdColor = 'var(--red)';
+      dataQuality = 'Null CVs';
+      metaReady = 'MAI only';
+    } else if (installsMid < 88) {
+      thresholdStatus = 'Borderline';
+      thresholdColor = 'var(--orange)';
+      dataQuality = 'Coarse (L/M/H)';
+      metaReady = 'MAI only';
+    } else if (installsMid < 150) {
+      thresholdStatus = 'Above';
+      thresholdColor = 'var(--blue)';
+      dataQuality = 'Fine (0–63) likely';
+      metaReady = 'MAI → AEO';
+    } else {
+      thresholdStatus = 'Comfortable';
+      thresholdColor = 'var(--green)';
+      dataQuality = 'Full fine CVs';
+      metaReady = 'MAI → AEO → VO';
+    }
+
+    document.getElementById('budgetOutput').innerHTML = `
+      <div class="budget-stat"><div class="bs-value" style="color: var(--text);">${installsLow}–${installsHigh}</div><div class="bs-label">Est. daily installs</div></div>
+      <div class="budget-stat"><div class="bs-value" style="color: ${thresholdColor};">${thresholdStatus}</div><div class="bs-label">Privacy threshold</div></div>
+      <div class="budget-stat"><div class="bs-value" style="color: ${thresholdColor};">${dataQuality}</div><div class="bs-label">Data quality</div></div>
+      <div class="budget-stat"><div class="bs-value" style="color: var(--accent2);">${metaReady}</div><div class="bs-label">Meta optimization path</div></div>
+    `;
+
+    const advice = document.getElementById('budgetAdvice');
+    if (installsMid < 40) {
+      advice.className = 'callout callout-critical';
+      advice.innerHTML = '<strong>Very tight.</strong> At this budget you\'ll get mostly null CVs. Focus on a single campaign, rely on AppsFlyer modeled data, and use Android as a proxy. Consider if you can increase to at least $500/day.';
+    } else if (installsMid < 88) {
+      advice.className = 'callout callout-warn';
+      advice.innerHTML = '<strong>Workable but limited.</strong> You\'ll likely get coarse CVs (Low/Medium/High) which gives directional signal. Keep to 1 campaign, 1 ad set. AppsFlyer modeled data will help fill gaps.';
+    } else if (installsMid < 150) {
+      advice.className = 'callout callout-info';
+      advice.innerHTML = '<strong>Good position.</strong> You should get fine-grained CVs most of the time. After 2-3 weeks of MAI, you\'ll likely have enough purchase data to switch to AEO.';
+    } else {
+      advice.className = 'callout callout-info';
+      advice.innerHTML = '<strong>Strong position.</strong> Plenty of volume for full SKAN data. You can move through MAI → AEO → VO relatively quickly. Consider testing a second campaign or creative variations.';
+    }
+  }
+  updateBudget(500);
+
+  // Checklist
+  function toggleCheck(li) {
+    li.classList.toggle('checked');
+    updateCheckProgress();
+  }
+
+  function updateCheckProgress() {
+    const all = document.querySelectorAll('.checklist li');
+    const checked = document.querySelectorAll('.checklist li.checked');
+    const pct = all.length ? Math.round((checked.length / all.length) * 100) : 0;
+    const fill = document.getElementById('checkFill');
+    const count = document.getElementById('checkCount');
+    const total = document.getElementById('checkTotal');
+    if (fill) fill.style.width = pct + '%';
+    if (count) count.textContent = checked.length;
+    if (total) total.textContent = all.length;
+  }
+  updateCheckProgress();
+
+  // Active nav link
+  const sections = document.querySelectorAll('section[id]');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 100) current = s.id;
+    });
+    document.querySelectorAll('nav a').forEach(a => {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    });
+  });
+</script>
+</body>
+</html>

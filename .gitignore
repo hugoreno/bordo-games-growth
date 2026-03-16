@@ -1,0 +1,41 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+.next/
+dist/
+out/
+
+# Turbo
+.turbo/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Debug
+npm-debug.log*
+pnpm-debug.log*
+
+# Vercel
+.vercel
+
+# Generated
+*.tsbuildinfo
+
+# Competitor ad scrape cache
+assets/competitors/
+tools/ad-research/data/raw/
+
+# Creative studio output
+apps/creative-studio/output/
+apps/creative-studio/briefs/from-insights/
