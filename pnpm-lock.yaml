@@ -23,28 +23,46 @@ importers:
       '@bordo/ui':
         specifier: workspace:*
         version: link:../../packages/ui
-      '@resvg/resvg-js':
-        specifier: ^2.6.0
-        version: 2.6.2
-      react:
-        specifier: ^19.0.0
-        version: 19.2.4
-      satori:
-        specifier: ^0.12.0
-        version: 0.12.2
-    devDependencies:
       '@fontsource/inter':
         specifier: ^5.2.8
         version: 5.2.8
       '@fontsource/playfair-display':
         specifier: ^5.2.8
         version: 5.2.8
+      '@resvg/resvg-js':
+        specifier: ^2.6.0
+        version: 2.6.2
+      next:
+        specifier: ^15.3.0
+        version: 15.5.12(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      react:
+        specifier: ^19.0.0
+        version: 19.2.4
+      react-dom:
+        specifier: ^19.0.0
+        version: 19.2.4(react@19.2.4)
+      satori:
+        specifier: ^0.12.0
+        version: 0.12.2
+    devDependencies:
+      '@tailwindcss/postcss':
+        specifier: ^4.1.0
+        version: 4.2.1
       '@types/node':
         specifier: ^22.0.0
         version: 22.19.15
       '@types/react':
         specifier: ^19.0.0
         version: 19.2.14
+      '@types/react-dom':
+        specifier: ^19.0.0
+        version: 19.2.3(@types/react@19.2.14)
+      postcss:
+        specifier: ^8.5.0
+        version: 8.5.8
+      tailwindcss:
+        specifier: ^4.1.0
+        version: 4.2.1
       tsx:
         specifier: ^4.19.0
         version: 4.21.0

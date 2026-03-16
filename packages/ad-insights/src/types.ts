@@ -28,6 +28,24 @@ export interface CompetitorAd {
   dominantColors: string[];
   layout: LayoutPattern;
   scrapedAt: string;
+  adSnapshotUrl?: string;
+  platform?: string;
+  startDate?: string;
+}
+
+export interface CompetitorConfig {
+  id: string;
+  name: string;
+  slug: string;
+  searchTerms: string;
+  color: string;
+}
+
+export interface AdResearchSnapshot {
+  snapshotId: string;
+  scrapedAt: string;
+  competitors: CompetitorInsights[];
+  aggregated: AggregatedPatterns;
 }
 
 export interface CompetitorInsights {
