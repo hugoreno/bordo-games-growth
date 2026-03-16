@@ -40,3 +40,4 @@ tools/ad-research/data/snapshots/
 # Creative studio output
 apps/creative-studio/output/
 apps/creative-studio/briefs/from-insights/
+.env*.local
