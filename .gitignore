@@ -35,6 +35,7 @@ pnpm-debug.log*
 # Competitor ad scrape cache
 assets/competitors/
 tools/ad-research/data/raw/
+tools/ad-research/data/snapshots/
 
 # Creative studio output
 apps/creative-studio/output/

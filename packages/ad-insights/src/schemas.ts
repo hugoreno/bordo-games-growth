@@ -13,7 +13,7 @@ export const AdSizeSchema = z.enum(["square", "landscape", "story"]);
 export const CompetitorAdSchema = z.object({
   id: z.string(),
   competitor: z.string(),
-  imageUrl: z.string().url(),
+  imageUrl: z.string(),
   localImagePath: z.string().optional(),
   headline: z.string().optional(),
   bodyText: z.string().optional(),
@@ -21,6 +21,24 @@ export const CompetitorAdSchema = z.object({
   dominantColors: z.array(z.string()),
   layout: LayoutPatternSchema,
   scrapedAt: z.string(),
+  adSnapshotUrl: z.string().optional(),
+  platform: z.string().optional(),
+  startDate: z.string().optional(),
+});
+
+export const CompetitorConfigSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  slug: z.string(),
+  searchTerms: z.string(),
+  color: z.string(),
+});
+
+export const AdResearchSnapshotSchema = z.object({
+  snapshotId: z.string(),
+  scrapedAt: z.string(),
+  competitors: z.array(z.lazy(() => CompetitorInsightsSchema)),
+  aggregated: z.lazy(() => AggregatedPatternsSchema),
 });
 
 export const CompetitorInsightsSchema = z.object({

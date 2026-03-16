@@ -6,12 +6,12 @@
   "scripts": {
     "ad-research": "tsx src/cli.ts",
     "scrape": "tsx src/cli.ts scrape",
+    "scrape-all": "tsx src/cli.ts scrape-all",
     "build": "tsc --noEmit",
     "clean": "rm -rf dist data/raw"
   },
   "dependencies": {
-    "@bordo/ad-insights": "workspace:*",
-    "playwright": "^1.49.0"
+    "@bordo/ad-insights": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",

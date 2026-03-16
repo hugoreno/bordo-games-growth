@@ -5,6 +5,8 @@ export type {
   CompetitorInsights,
   AggregatedPatterns,
   CreativeBrief,
+  CompetitorConfig,
+  AdResearchSnapshot,
 } from "./types";
 
 export {
@@ -14,4 +16,10 @@ export {
   CompetitorInsightsSchema,
   AggregatedPatternsSchema,
   CreativeBriefSchema,
+  CompetitorConfigSchema,
+  AdResearchSnapshotSchema,
 } from "./schemas";
+
+export { COMPETITORS, getCompetitorBySlug } from "./competitors";
+export { fetchCompetitorAds, fetchAllCompetitors } from "./meta-api";
+export { aggregatePatterns } from "./analyze";
